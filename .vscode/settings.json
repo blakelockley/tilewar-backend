@@ -1,0 +1,16 @@
+{
+  "editor.formatOnSave": true,
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": false,
+  "python.linting.mypyEnabled": true,
+  "python.formatting.provider": "black",
+  "python.terminal.activateEnvironment": true,
+  "python.venvPath": "./venv",
+  "python.autoComplete.extraPaths": ["./apps"],
+  "python.analysis.extraPaths": ["./apps"],
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/venv/*/**": true
+  }
+}
