@@ -1,10 +1,9 @@
 version: "3.7"
 
 services:
+
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     command: gunicorn settings.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_volume:/usr/src/app/static
@@ -13,6 +12,15 @@ services:
       - 8000
     env_file:
       - ./.env.prod
+
+    bot:
+      build: .
+      command: python bot.py
+      env_file:
+        - ./.env
+      volumes:
+        - ./:/usr/src/app/
+
   nginx:
     build: ./nginx
     volumes:

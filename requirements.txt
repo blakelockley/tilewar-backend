@@ -4,3 +4,4 @@ django-cors-headers
 Pillow
 black
 mypy
+discord
