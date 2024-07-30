@@ -20,12 +20,16 @@ class Difficulty(models.TextChoices):
     HARD = "HARD", "Hard"
 
 
-class Task(models.Model):
+class Tile(models.Model):
     class Meta:
-        ordering = ("title",)
+        ordering = ("index",)
+
+    index = models.PositiveIntegerField(unique=True)
 
     title = models.CharField(max_length=100)
     description = models.TextField()
+
+    image = models.ImageField(upload_to="tiles", blank=True, null=True)
 
     category = models.CharField(
         max_length=20, choices=Category.choices, default=Category.OTHER
@@ -34,28 +38,13 @@ class Task(models.Model):
         max_length=20, choices=Difficulty.choices, default=Difficulty.EASY
     )
 
-    image = models.ImageField(upload_to="tasks", blank=True, null=True)
-
     def __str__(self):
-        return f"Task ({self.title})"
+        return f"Tile ({self.index}. {self.title})"
 
 
-class Tile(models.Model):
-    class Meta:
-        ordering = ("index",)
+class TileCompletion(models.Model):
 
-    index = models.PositiveIntegerField(unique=True)
-
-    task = models.ForeignKey(Task, null=True, on_delete=models.SET_NULL)
-
-    visible_to_all = models.BooleanField(default=False)
-    starting_tile_for_team = models.ForeignKey(
-        "players.Team",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="starting_tile",
-    )
+    tile = models.ForeignKey(Tile, null=True, on_delete=models.SET_NULL)
 
     completed_by_team = models.ForeignKey(
         "players.Team",
@@ -72,9 +61,6 @@ class Tile(models.Model):
     )
 
     completed_at = models.DateTimeField(null=True, blank=True)
-
-    def __str__(self):
-        return f"Tile ({self.index}. {self.task.title})"
 
     def _get_adjacent_tile(self):
         adjacent_tile_numbers = set()
